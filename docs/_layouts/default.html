@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% assign is_digest = page.lang %}
+  <title>{% if is_digest %}Horizon · {{ page.date | date: "%d.%m.%Y" }}{% elsif page.title and page.url != "/" %}{{ page.title }} · Horizon{% else %}Horizon{% endif %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>">
+  <link rel="alternate" type="application/atom+xml" title="Horizon" href="{{ '/feed-ru.xml' | relative_url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700;7..72,900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="{{ '/assets/css/horizon.css' | relative_url }}">
+  <script src="{{ '/assets/js/horizon.js' | relative_url }}" defer></script>
+</head>
+<body>
+  {% assign ru_posts = site.posts | where: "lang", "ru" %}
+  {% assign latest = ru_posts | first %}
+  <div class="page">
+    <header class="masthead">
+      <div class="masthead-row">
+        <span class="label left">{% if is_digest %}Выпуск {{ page.date | date: "%d.%m.%Y" }}{% else %}Выпусков: {{ ru_posts.size }}{% endif %}</span>
+        <a class="wordmark" href="{{ '/' | relative_url }}">Horizon</a>
+        <span class="label right"><span class="dot" aria-hidden="true"></span>Каждый день в 06:00</span>
+      </div>
+      <div class="tagline label"><span class="star" aria-hidden="true">✦</span> Go · бэкенд · Hacker News <span class="star" aria-hidden="true">✦</span></div>
+      <nav class="nav label" aria-label="Разделы">
+        {% if latest %}<a href="{{ latest.url | relative_url }}">Свежий выпуск</a>{% endif %}
+        <a href="{{ '/' | relative_url }}">Архив</a>
+        <a href="{{ '/feed-ru.xml' | relative_url }}">RSS</a>
+        <a href="https://github.com/Consolushka/Horizon">GitHub</a>
+      </nav>
+    </header>
+
+    {% if is_digest %}
+    <section class="lede">
+      <div class="eyebrow label">Дайджест · {{ page.date | date: "%d.%m.%Y" }}</div>
+      <h1 class="lede-title" data-digest-title>Выпуск за {{ page.date | date: "%d.%m.%Y" }}</h1>
+    </section>
+    {% endif %}
+
+    <main class="content{% if is_digest %} digest{% endif %}">
+      {{ content }}
+    </main>
+
+    <footer class="label">
+      <span>Horizon · собрано автоматически</span>
+      <a href="{{ '/feed-ru.xml' | relative_url }}">RSS-лента</a>
+      <span>Следующий выпуск в 06:00 МСК</span>
+    </footer>
+  </div>
+</body>
+</html>
