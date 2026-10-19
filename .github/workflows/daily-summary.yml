@@ -9,6 +9,9 @@ on:
       hours:
         description: "За сколько часов собирать новости"
         default: "24"
+      model:
+        description: "Модель только для этого запуска (пусто — из конфига)"
+        default: ""
 
 jobs:
   daily-summary:
@@ -34,7 +37,13 @@ jobs:
         run: uv sync
 
       - name: Prepare GitHub Actions config
-        run: cp data/config.github.json data/config.json
+        env:
+          MODEL: ${{ inputs.model }}
+        run: |
+          cp data/config.github.json data/config.json
+          if [ -n "$MODEL" ]; then
+            jq --arg model "$MODEL" '.ai.model = $model' data/config.json > data/config.tmp && mv data/config.tmp data/config.json
+          fi
 
       - name: Run Horizon
         env:

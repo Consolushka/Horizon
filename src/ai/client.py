@@ -185,7 +185,9 @@ class AnthropicClient(AIClient):
                 output_tokens=getattr(usage, "output_tokens", 0),
             )
         # Models with thinking on by default put a thinking block before the text.
-        return next(block.text for block in message.content if block.type == "text")
+        # A refusal or a reply cut off while thinking has no text block at all:
+        # an empty string lets callers treat it as an unparseable answer.
+        return next((block.text for block in message.content if block.type == "text"), "")
 
 
 class OpenAIClient(AIClient):
