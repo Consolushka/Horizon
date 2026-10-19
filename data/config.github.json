@@ -75,6 +75,27 @@
         ]
       },
       {
+        "name": "Civil.ge",
+        "url": "https://civil.ge/feed",
+        "enabled": true,
+        "category": "georgia",
+        "profile": "politics"
+      },
+      {
+        "name": "OC Media",
+        "url": "https://oc-media.org/feed/",
+        "enabled": true,
+        "category": "georgia",
+        "profile": "politics"
+      },
+      {
+        "name": "JAMnews",
+        "url": "https://jam-news.net/ru/feed/",
+        "enabled": true,
+        "category": "georgia",
+        "profile": "politics"
+      },
+      {
         "name": "BBC World",
         "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
         "enabled": true,
@@ -257,6 +278,13 @@
         "limit": 8,
         "categories": [
           "ru-news"
+        ]
+      },
+      "georgia": {
+        "name": "Грузия",
+        "limit": 3,
+        "categories": [
+          "georgia"
         ]
       },
       "world-politics": {
