@@ -2,8 +2,8 @@ name: Daily Horizon Summary
 
 on:
   schedule:
-    # GitHub запускает по UTC и часто с опозданием: 03:00 UTC = 06:00 МСК.
-    - cron: '0 3 * * *'
+    # Время в UTC. Стартуем в 07:40 МСК: GitHub часто опаздывает с запуском до часа, а сам прогон идёт ~20 минут, так выпуск готов к 09:00.
+    - cron: '40 4 * * *'
   workflow_dispatch:      # Allow manual trigger
     inputs:
       hours:

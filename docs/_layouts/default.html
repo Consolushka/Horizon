@@ -21,9 +21,9 @@
       <div class="masthead-row">
         <span class="label left">{% if is_digest %}Выпуск {{ page.date | date: "%d.%m.%Y" }}{% else %}Выпусков: {{ ru_posts.size }}{% endif %}</span>
         <a class="wordmark" href="{{ '/' | relative_url }}">Horizon</a>
-        <span class="label right"><span class="dot" aria-hidden="true"></span>Каждый день в 06:00</span>
+        <span class="label right"><span class="dot" aria-hidden="true"></span>Каждый день к 09:00</span>
       </div>
-      <div class="tagline label"><span class="star" aria-hidden="true">✦</span> Go · бэкенд · Hacker News <span class="star" aria-hidden="true">✦</span></div>
+      <div class="tagline label"><span class="star" aria-hidden="true">✦</span> Политика · Россия · НБА · Технологии <span class="star" aria-hidden="true">✦</span></div>
       <nav class="nav label" aria-label="Разделы">
         {% if latest %}<a href="{{ latest.url | relative_url }}">Свежий выпуск</a>{% endif %}
         <a href="{{ '/' | relative_url }}">Архив</a>
@@ -46,7 +46,7 @@
     <footer class="label">
       <span>Horizon · собрано автоматически</span>
       <a href="{{ '/feed-ru.xml' | relative_url }}">RSS-лента</a>
-      <span>Следующий выпуск в 06:00 МСК</span>
+      <span>Новый выпуск каждый день к 09:00 МСК</span>
     </footer>
   </div>
 </body>
