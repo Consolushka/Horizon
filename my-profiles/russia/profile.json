@@ -1,0 +1,20 @@
+{
+  "id": "russia",
+  "name": "Russia",
+  "display_names": {
+    "ru": "Россия"
+  },
+  "match": "match.md",
+  "analysis": "analysis.md",
+  "enrichment": {
+    "prompt": "enrichment.md",
+    "blocks": [
+      {
+        "id": "summary",
+        "type": "section",
+        "tools": [],
+        "primary": true
+      }
+    ]
+  }
+}

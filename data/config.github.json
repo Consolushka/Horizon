@@ -9,88 +9,181 @@
     "languages": [
       "ru"
     ],
-    "analysis_concurrency": 3,
+    "analysis_concurrency": 5,
     "enrichment_concurrency": 3
   },
   "processing": {
-    "profiles_dir": "profiles",
-    "default_profile": "tech-news",
+    "profiles_dir": "my-profiles",
+    "default_profile": "tech",
     "profile_settings": {
-      "tech-news": {
+      "politics": {
         "threshold": 7.0,
         "topic_dedup": true
       },
-      "tech-blog": {
-        "threshold": 4.0,
-        "topic_dedup": false
+      "russia": {
+        "threshold": 7.0,
+        "topic_dedup": true
+      },
+      "nba": {
+        "threshold": 6.0,
+        "topic_dedup": true
+      },
+      "tech": {
+        "threshold": 7.0,
+        "topic_dedup": true
+      },
+      "gadgets": {
+        "threshold": 7.0,
+        "topic_dedup": true
+      },
+      "go": {
+        "threshold": 6.0,
+        "topic_dedup": true
       }
     }
   },
   "sources": {
-    "github": [
-      {
-        "type": "repo_releases",
-        "owner": "golang",
-        "repo": "go",
-        "enabled": true,
-        "profile": "tech-news"
-      }
-    ],
-    "hackernews": {
-      "enabled": true,
-      "fetch_top_stories": 30,
-      "min_score": 150,
-      "profile": "tech-news"
-    },
     "rss": [
+      {
+        "name": "РБК",
+        "url": "https://news.google.com/rss/search?q=site:rbc.ru+when:1d&hl=ru&gl=RU&ceid=RU:ru",
+        "enabled": true,
+        "category": "ru-news",
+        "profile": [
+          "politics",
+          "russia"
+        ]
+      },
+      {
+        "name": "ТАСС",
+        "url": "https://news.google.com/rss/search?q=site:tass.ru+when:1d&hl=ru&gl=RU&ceid=RU:ru",
+        "enabled": true,
+        "category": "ru-news",
+        "profile": [
+          "politics",
+          "russia"
+        ]
+      },
+      {
+        "name": "Медуза",
+        "url": "https://meduza.io/rss/all",
+        "enabled": true,
+        "category": "ru-news",
+        "profile": [
+          "politics",
+          "russia"
+        ]
+      },
+      {
+        "name": "BBC World",
+        "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+        "enabled": true,
+        "category": "world-politics",
+        "profile": "politics"
+      },
+      {
+        "name": "BBC US & Canada",
+        "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml",
+        "enabled": true,
+        "category": "world-politics",
+        "profile": "politics"
+      },
+      {
+        "name": "BBC Europe",
+        "url": "https://feeds.bbci.co.uk/news/world/europe/rss.xml",
+        "enabled": true,
+        "category": "world-politics",
+        "profile": "politics"
+      },
+      {
+        "name": "Politico",
+        "url": "https://rss.politico.com/politics-news.xml",
+        "enabled": true,
+        "category": "world-politics",
+        "profile": "politics"
+      },
+      {
+        "name": "Politico Europe",
+        "url": "https://www.politico.eu/feed/",
+        "enabled": true,
+        "category": "world-politics",
+        "profile": "politics"
+      },
+      {
+        "name": "ESPN NBA",
+        "url": "https://www.espn.com/espn/rss/nba/news",
+        "enabled": true,
+        "category": "nba",
+        "profile": "nba"
+      },
+      {
+        "name": "CBS Sports NBA",
+        "url": "https://www.cbssports.com/rss/headlines/nba/",
+        "enabled": true,
+        "category": "nba",
+        "profile": "nba"
+      },
+      {
+        "name": "The Verge",
+        "url": "https://www.theverge.com/rss/index.xml",
+        "enabled": true,
+        "category": "gadgets",
+        "profile": [
+          "gadgets",
+          "tech"
+        ]
+      },
+      {
+        "name": "9to5Mac",
+        "url": "https://9to5mac.com/feed/",
+        "enabled": true,
+        "category": "gadgets",
+        "profile": "gadgets"
+      },
+      {
+        "name": "9to5Google",
+        "url": "https://9to5google.com/feed/",
+        "enabled": true,
+        "category": "gadgets",
+        "profile": "gadgets"
+      },
+      {
+        "name": "MacRumors",
+        "url": "https://feeds.macrumors.com/MacRumors-All",
+        "enabled": true,
+        "category": "gadgets",
+        "profile": "gadgets"
+      },
       {
         "name": "Go Blog",
         "url": "https://go.dev/blog/feed.atom",
         "enabled": true,
         "category": "go",
-        "profile": "tech-blog"
+        "profile": "go"
       },
       {
         "name": "Golang Weekly",
         "url": "https://golangweekly.com/rss/",
         "enabled": true,
         "category": "go",
-        "profile": "tech-news"
-      },
+        "profile": "go"
+      }
+    ],
+    "hackernews": {
+      "enabled": true,
+      "fetch_top_stories": 30,
+      "min_score": 150,
+      "category": "tech",
+      "profile": "tech"
+    },
+    "github": [
       {
-        "name": "Lobsters: go/distributed/databases",
-        "url": "https://lobste.rs/t/go,distributed,databases.rss",
+        "type": "repo_releases",
+        "owner": "golang",
+        "repo": "go",
         "enabled": true,
-        "category": "backend",
-        "profile": "tech-news"
-      },
-      {
-        "name": "Martin Fowler",
-        "url": "https://martinfowler.com/feed.atom",
-        "enabled": true,
-        "category": "architecture",
-        "profile": "tech-blog"
-      },
-      {
-        "name": "The Pragmatic Engineer",
-        "url": "https://newsletter.pragmaticengineer.com/feed",
-        "enabled": true,
-        "category": "engineering",
-        "profile": "tech-blog"
-      },
-      {
-        "name": "Cloudflare Blog",
-        "url": "https://blog.cloudflare.com/rss/",
-        "enabled": true,
-        "category": "backend",
-        "profile": "tech-blog"
-      },
-      {
-        "name": "Netflix Tech Blog",
-        "url": "https://netflixtechblog.com/feed",
-        "enabled": true,
-        "category": "architecture",
-        "profile": "tech-blog"
+        "category": "go",
+        "profile": "go"
       }
     ],
     "reddit": {
@@ -103,43 +196,115 @@
           "time_filter": "day",
           "fetch_limit": 15,
           "min_score": 50,
-          "profile": "tech-news"
-        },
-        {
-          "subreddit": "ExperiencedDevs",
-          "enabled": true,
-          "sort": "top",
-          "time_filter": "day",
-          "fetch_limit": 10,
-          "min_score": 100,
-          "profile": "tech-news"
-        },
-        {
-          "subreddit": "programming",
-          "enabled": true,
-          "sort": "top",
-          "time_filter": "day",
-          "fetch_limit": 15,
-          "min_score": 200,
-          "profile": "tech-news"
+          "category": "go",
+          "profile": "go"
         }
       ],
       "users": [],
       "fetch_comments": 5
+    },
+    "ossinsight": {
+      "enabled": true,
+      "period": "past_24_hours",
+      "languages": [
+        "All",
+        "Go"
+      ],
+      "keywords": [],
+      "min_stars": 10,
+      "max_items": 15,
+      "category": "tech",
+      "profile": "tech"
+    },
+    "telegram": {
+      "enabled": true,
+      "channels": [
+        {
+          "channel": "cbpub",
+          "enabled": true,
+          "fetch_limit": 30,
+          "category": "ru-news",
+          "profile": [
+            "politics",
+            "russia"
+          ]
+        },
+        {
+          "channel": "rozetked",
+          "enabled": true,
+          "fetch_limit": 30,
+          "category": "gadgets",
+          "profile": "gadgets"
+        },
+        {
+          "channel": "ai_for_devs",
+          "enabled": true,
+          "fetch_limit": 30,
+          "category": "tech",
+          "profile": "tech"
+        }
+      ]
     }
   },
   "collection": {
     "time_window_hours": 24
   },
   "digest": {
-    "max_items": null,
-    "profile_order": [
-      "tech-news",
-      "tech-blog"
-    ],
-    "category_groups": {},
+    "max_items": 25,
+    "category_groups": {
+      "ru-news": {
+        "name": "Россия",
+        "limit": 8,
+        "categories": [
+          "ru-news"
+        ]
+      },
+      "world-politics": {
+        "name": "Мировая политика",
+        "limit": 5,
+        "categories": [
+          "world-politics"
+        ]
+      },
+      "nba": {
+        "name": "НБА",
+        "limit": 3,
+        "categories": [
+          "nba"
+        ]
+      },
+      "tech": {
+        "name": "Релизы и open source",
+        "limit": 3,
+        "categories": [
+          "tech"
+        ]
+      },
+      "gadgets": {
+        "name": "Гаджеты",
+        "limit": 4,
+        "categories": [
+          "gadgets"
+        ]
+      },
+      "go": {
+        "name": "Go",
+        "limit": 2,
+        "categories": [
+          "go"
+        ]
+      }
+    },
     "default_group": "other",
-    "default_group_limit": null
+    "default_group_limit": 2,
+    "profile_order": [
+      "politics",
+      "russia",
+      "nba",
+      "tech",
+      "gadgets",
+      "go"
+    ]
   },
   "webhook": {
     "enabled": false,

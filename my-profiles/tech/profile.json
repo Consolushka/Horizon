@@ -1,0 +1,26 @@
+{
+  "id": "tech",
+  "name": "Releases and Open Source",
+  "display_names": {
+    "ru": "Релизы и open source"
+  },
+  "match": "match.md",
+  "analysis": "analysis.md",
+  "enrichment": {
+    "prompt": "enrichment.md",
+    "blocks": [
+      {
+        "id": "summary",
+        "type": "section",
+        "tools": [],
+        "primary": true
+      },
+      {
+        "id": "community_discussion",
+        "type": "section",
+        "tools": [],
+        "optional": true
+      }
+    ]
+  }
+}
