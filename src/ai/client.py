@@ -5,7 +5,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 from openai import AsyncAzureOpenAI, AsyncOpenAI
-from anthropic import AsyncAnthropic
+from anthropic import AsyncAnthropic, BadRequestError
 from google import genai
 from google.genai import types
 
@@ -135,6 +135,9 @@ class AnthropicClient(AIClient):
         self.model = config.model
         self.temperature = config.temperature
         self.max_tokens = config.max_tokens
+        # Newer Claude models (e.g. Haiku 5.5) reject a custom `temperature`.
+        # We learn this on first 400 and stop sending it.
+        self._supports_temperature = True
 
     async def complete(
         self,
@@ -157,13 +160,23 @@ class AnthropicClient(AIClient):
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
 
-        message = await self.client.messages.create(
-            model=self.model,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            system=system,
-            messages=[{"role": "user", "content": user}]
-        )
+        request_kwargs: Dict[str, Any] = {
+            "model": self.model,
+            "max_tokens": max_tokens,
+            "system": system,
+            "messages": [{"role": "user", "content": user}],
+        }
+        if self._supports_temperature:
+            request_kwargs["temperature"] = temperature
+
+        try:
+            message = await self.client.messages.create(**request_kwargs)
+        except BadRequestError as exc:
+            if not (self._supports_temperature and "temperature" in str(exc).lower()):
+                raise
+            self._supports_temperature = False
+            request_kwargs.pop("temperature")
+            message = await self.client.messages.create(**request_kwargs)
         usage = getattr(message, "usage", None)
         if usage is not None:
             record_usage(
@@ -171,7 +184,8 @@ class AnthropicClient(AIClient):
                 input_tokens=getattr(usage, "input_tokens", 0),
                 output_tokens=getattr(usage, "output_tokens", 0),
             )
-        return message.content[0].text
+        # Models with thinking on by default put a thinking block before the text.
+        return next(block.text for block in message.content if block.type == "text")
 
 
 class OpenAIClient(AIClient):
