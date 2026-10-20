@@ -2,8 +2,10 @@ name: Daily Horizon Summary
 
 on:
   schedule:
-    # Время в UTC. Стартуем в 07:40 МСК: GitHub часто опаздывает с запуском до часа, а сам прогон идёт ~20 минут, так выпуск готов к 09:00.
-    - cron: '40 4 * * *'
+    # Время в UTC, выпуск нужен к 09:00 по Тбилиси (UTC+4). GitHub запускает по расписанию
+    # с опозданием до часа, а иногда пропускает запуск совсем, поэтому есть второй, страховочный.
+    - cron: '0 3 * * *'    # 07:00 Тбилиси
+    - cron: '0 4 * * *'    # 08:00 Тбилиси, ничего не делает, если выпуск за сегодня уже есть
   workflow_dispatch:      # Allow manual trigger
     inputs:
       hours:
@@ -13,8 +15,31 @@ on:
         description: "Модель только для этого запуска (пусто — из конфига)"
         default: ""
 
+# Страховочный запуск ждёт, пока закончится основной, а не идёт параллельно.
+concurrency:
+  group: daily-summary
+  cancel-in-progress: false
+
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          post="_posts/$(date -u +%F)-summary-ru.md"
+          if [ "$EVENT" = "schedule" ] && gh api "repos/${{ github.repository }}/contents/$post?ref=gh-pages" --silent 2>/dev/null; then
+            echo "Выпуск за сегодня уже есть, пропускаю"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
   daily-summary:
+    needs: check
+    if: needs.check.outputs.skip != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Needed to commit changes
